@@ -2,9 +2,12 @@ import adafruit_trellism4
 import adafruit_adxl34x
 import board
 from busio import I2C
+import neopixel
+import adafruit_dotstar
 
 trellis = adafruit_trellism4.TrellisM4Express()
 accel = adafruit_adxl34x.ADXL343(I2C(board.ACCELEROMETER_SCL, board.ACCELEROMETER_SDA))
+pixel = adafruit_dotstar.DotStar(board.DOTSTAR_CLOCK,board.DOTSTAR_DATA, 1)
 accel.enable_tap_detection(tap_count = 2, threshold = 30)
 pressed = []
 pixeldata = []
@@ -20,6 +23,7 @@ _sel = 0
 
 def update_drawing():
     global pressed, drawing, pixeldata
+    pixel.fill([int(x*[1, 0.3, 0.05][color[3]]) for x in color[:3]])
     for k in trellis.pressed_keys:
         if k not in pressed:
             pressed.append(k)
@@ -42,6 +46,7 @@ def update_drawing():
 
 def update_menu():
     global color, pressed, _sel, drawing, pixeldata, clearing
+    pixel.fill((0, 0, 0))
     for c, col in enumerate(COLORS):
         trellis.pixels[c, 3] = [int(x*0.075) for x in col]
     trellis.pixels[_sel, 3] = color
