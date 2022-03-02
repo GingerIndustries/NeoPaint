@@ -67,7 +67,7 @@ def update_menu():
                 _sel = k[0]
             elif k == (7, 0):
                 clearing = True
-            elif k[0] == 1:
+            elif k[0] == 0 or k[0] == 1:
                 color[3] = k[1]
     trellis.pixels.show()
 
